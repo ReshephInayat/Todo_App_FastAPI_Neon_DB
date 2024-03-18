@@ -1,6 +1,6 @@
 # Here We are Importing fastapi From FastAPI
-# Dependencies: It is just a function that can take all the same parameters that a path operation function can take
-# https://fastapi.tiangolo.com/tutorial/dependencies/
+# Dependencies: It is just a function that can take all the same parameters that a path operation function can take -- # https://fastapi.tiangolo.com/tutorial/dependencies/
+# HttpException sub class od exception and  a class from starlette.exceptions that we will use to handle exceptions in our API
 from fastapi import FastAPI, Depends, HTTPException
 
 
@@ -12,27 +12,28 @@ from contextlib import asynccontextmanager
 
 # Importing sqlmodel from SQlmodel: SQLModel is based on Python type annotations, and powered by Pydantic and SQLAlchemy
 # Field: https://sqlmodel.tiangolo.com/tutorial/create-db-and-table/# define-the-fields-columns
-# Session:
-# select:
+# Session: https://sqlmodel.tiangolo.com/tutorial/select/?h=session#sqlmodels-sessionexec
+# https://sqlmodel.tiangolo.com/tutorial/select/?h=session#create-a-session
+# select: https://sqlmodel.tiangolo.com/tutorial/select/h=session#create-a-select-statement
 # create_engine: It is an object that handles the communication with the database.If you have a server database (for example PostgreSQL or MySQL), the engine will hold the network connections to that database.
 from sqlmodel import SQLModel, Field, Session, select, create_engine
 
 
 # importing Optional Type from typing python typing package
-# Annotated: https://fastapi.tiangolo.com/tutorial/dependencies/#share-annotated-dependencies
+# Annotated: https://fastapi.tiangolo.com/tutorial/dependencies #share-annotated-dependencies
 from typing import Annotated, Optional
 
 
 # importing setting modules
 from app import settings
 
+
 app: FastAPI = FastAPI()
 
-# The name of each of these variables will be the name of the column in the table.      And the type of each of them will also be the type of table column:
 
-# primary_key:Now let's review the id field. This is the primary key of the table.So, we need to mark id as the primary key.To do that, we use the special Field function from sqlmodel and set the argument primary_key=True:
+# The name of each of these variables will be the name of the column in the table.And the type of each of them will also be the type of table column:
+# primary_key: Now let's review the id field. This is the primary key of the table.So, we need to mark id as the primary key.To do that, we use the special Field function from sqlmodel and set the argument primary_key=True:
 # https://sqlmodel.tiangolo.com/tutorial/create-db-and-table/#primary-key-id
-
 
 class Todo(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -103,18 +104,15 @@ def read_todos(session: Annotated[Session, Depends(get_session)]):
     todos = session.exec(select(Todo)).all()
     return todos
 
-
 # with Session(engine) as session: Similar to the create_todo function, this establishes a database session using the provided database engine.
-
 # - todos = session.exec(select(Todo)).all(): This executes a SELECT query on the Todo table (assuming Todo is a SQLAlchemy model) and retrieves all todo items from the database. It uses the select construct to create a SELECT statement, and all() fetches all results.
-
 # return todos: Finally, the retrieved todo items are returned as the response to the client. This is typically returned as a JSON array.
 
 
-@app.delete("/todos/{todo_id}")
-async def delete_todo(todo_id: int, session: Annotated[Session, Depends(get_session)]):
+@app.delete("/todos/{id}")
+async def delete_todo(id: int, session: Annotated[Session, Depends(get_session)]):
     # Fetch the Todo item to be deleted
-    todo = session.get(Todo, todo_id)
+    todo = session.get(Todo, id)
     if todo is None:
         raise HTTPException(status_code=404, detail="Todo not found")
     # Delete the Todo item from the database
