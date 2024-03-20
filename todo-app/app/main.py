@@ -109,6 +109,15 @@ def read_todos(session: Annotated[Session, Depends(get_session)]):
 # return todos: Finally, the retrieved todo items are returned as the response to the client. This is typically returned as a JSON array.
 
 
+
+@app.get("/todos/{todo_id}", response_model=Todo)
+def read_single_todo(todo_id: int, session: Annotated[Session, Depends(get_session)]):
+    todo = session.get(Todo, todo_id)
+    if not todo:
+        raise HTTPException(status_code=404, detail="Todo not found")
+    return todo
+
+
 @app.delete("/todos/{todo_id}")
 def delete_todo(todo_id: int):
     with Session(engine) as session:
