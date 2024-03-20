@@ -50,7 +50,7 @@ connection_string = str(settings.DATABASE_URL).replace(
 # The pool_recycle=300 option is an “optimistic” approach to prevent the pool from using a connection that has passed a certain age. In this case, we are setting the value to 5 minutes to correspond with the default compute auto-suspend in Neon.
 # https://docs.sqlalchemy.org/en/20/core/pooling.html#setting-pool-recycle
 engine = create_engine(
-    connection_string, connect_args={"sslmode": "require"}, pool_recycle=300
+    connection_string, connect_args={"sslmode": "require"}, pool_recycle=300, echo=True
 )
 # Creating the engine is very simple, just call create_engine() with a URL for the database to use
 # in this case we stored the database url in a variable called connection_string and passed it as an argument
@@ -84,8 +84,8 @@ def get_session():
 
 
 @app.get("/")
-def read_root():
-    return {"Hello": "World"}
+def read_main():
+    return {"Response": "Todo App"}
 
 
 @app.post("/todos/", response_model=Todo)
@@ -109,13 +109,26 @@ def read_todos(session: Annotated[Session, Depends(get_session)]):
 # return todos: Finally, the retrieved todo items are returned as the response to the client. This is typically returned as a JSON array.
 
 
-@app.delete("/todos/{id}")
-async def delete_todo(id: int, session: Annotated[Session, Depends(get_session)]):
-    # Fetch the Todo item to be deleted
-    todo = session.get(Todo, id)
-    if todo is None:
-        raise HTTPException(status_code=404, detail="Todo not found")
-    # Delete the Todo item from the database
-    session.delete(todo)
-    session.commit()
-    return {"message": "Todo deleted successfully"}
+@app.delete("/todos/{todo_id}")
+def delete_todo(todo_id: int):
+    with Session(engine) as session:
+        todo = session.get(Todo, todo_id)
+        if not todo:
+            raise HTTPException(status_code=404, detail="Todo not found")
+        session.delete(todo)
+        session.commit()
+        return {"OK": True}
+
+
+@app.patch("/todos/{todo_id}", response_model=Todo)
+def update_todo(todo_id: int, todo: Todo):
+    with Session(engine) as session:
+        db_todo = session.get(Todo, todo_id)
+        if not db_todo:
+            raise HTTPException(status_code=404, detail="Todo not found")
+        todo_data = todo.model_dump(exclude_unset=True)
+        db_todo.sqlmodel_update(todo_data)
+        session.add(db_todo)
+        session.commit()
+        session.refresh(db_todo)
+        return db_todo
