@@ -67,9 +67,4 @@ def test_read_todos():
 # Test Update Pending.......
 
 
-from fastapi.testclient import TestClient
-from sqlmodel import Field, Session, SQLModel, create_engine, select
-from app.main import app, get_session, Todo
-from app import settings
-
 
