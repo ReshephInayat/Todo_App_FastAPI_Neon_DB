@@ -3,10 +3,12 @@
 # https://realpython.com/python-assert-statement/
 # https://understandingdata.com/posts/list-of-python-assert-statements-for-unit-tests/
 
+
 from fastapi.testclient import TestClient
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 from app.main import app, get_session, Todo
 from app import settings
+
 
 
 def test_read_main():
