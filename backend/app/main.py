@@ -2,7 +2,7 @@
 # Dependencies: It is just a function that can take all the same parameters that a path operation function can take -- # https://fastapi.tiangolo.com/tutorial/dependencies/
 # HttpException sub class od exception and  a class from starlette.exceptions that we will use to handle exceptions in our API
 from fastapi import FastAPI, Depends, HTTPException
-
+from sqlmodel import delete
 
 # If you check, the function is decorated with an @asynccontextmanager.
 # That converts the function into something called an "async context manager"
@@ -90,6 +90,7 @@ def read_main():
 
 @app.post("/todos/", response_model=Todo)
 def create_todo(todo: Todo, session: Annotated[Session, Depends(get_session)]):
+    print(f"Addied Todo {todo}")
     # session.add(todo): This adds the provided todo object to the session. This action stages the object for insertion into the database.
     session.add(todo)
     # session.commit(): This commits the transaction to the database, effectively persisting the changes (adding the new todo) to the database.
@@ -109,13 +110,21 @@ def read_todos(session: Annotated[Session, Depends(get_session)]):
 # return todos: Finally, the retrieved todo items are returned as the response to the client. This is typically returned as a JSON array.
 
 
-
 @app.get("/todos/{todo_id}", response_model=Todo)
 def read_single_todo(todo_id: int, session: Annotated[Session, Depends(get_session)]):
     todo = session.get(Todo, todo_id)
     if not todo:
         raise HTTPException(status_code=404, detail="Todo not found")
     return todo
+
+
+@app.delete("/todos/")
+async def delete_all_todos(session: Annotated[Session, Depends(get_session)]):
+    """Deletes all todos from the database"""
+    # Use query.delete() for deletion
+    session.query(Todo).delete()
+    session.commit()
+    return {"message": "Deleted all todos"}
 
 
 @app.delete("/todos/{todo_id}")
