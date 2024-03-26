@@ -6,7 +6,7 @@
 
 from fastapi.testclient import TestClient
 from sqlmodel import Session, SQLModel, create_engine
-from app.main import app, get_session
+from app.main import app, get_session, Todo
 from app import settings
 
 
@@ -46,9 +46,10 @@ def test_create_todo():
             return session
 
         app.dependency_overrides[get_session] = get_session_override
+        # override the dependencies of main.py
 
         client = TestClient(app=app)
-        todo_content = "buy Milky Bread"
+        todo_content = "Buy Milky Bread"
         response = client.post("/todos/", json={"content": todo_content})
         data = response.json()
         assert response.status_code == 200
