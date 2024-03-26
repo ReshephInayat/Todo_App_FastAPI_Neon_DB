@@ -9,7 +9,7 @@ const CreateTodo = () => {
   const SubmitHandler = async (e: any) => {
     e.preventDefault(); // Prevent default form submission
 
-    if (!task) {
+    if (!task.trim()) {
       toast.error("Add Your Task!", {
         position: "top-center",
         autoClose: 5000,
