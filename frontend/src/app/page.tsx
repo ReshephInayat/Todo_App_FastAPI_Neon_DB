@@ -8,7 +8,7 @@ export default function Home() {
       {/* Page Title */}
       <div className="flex justify-center items-center">
         <h1 className=" pt-32 pb-10 text-3xl md:text-5xl font-bold bg-gradient-to-r from-cyan-500 to-blue-500 inline-block text-transparent bg-clip-text">
-          Todo List
+          T D L
         </h1>
       </div>
 
