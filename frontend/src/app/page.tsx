@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="w-full h-[100%]  pb-72 bg-gray-800 selection:text-white  ">
+    <div className="w-full h-[100%]  pb-96 bg-gray-800 selection:text-white  ">
       {/* Page Title */}
       <div className="flex justify-center items-center">
         <h1 className=" pt-32 pb-10 text-3xl md:text-5xl font-bold bg-gradient-to-r from-cyan-500 to-blue-500 inline-block text-transparent bg-clip-text">
