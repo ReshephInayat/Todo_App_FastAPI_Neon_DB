@@ -58,6 +58,8 @@ engine = create_engine(
 
 # https://sqlmodel.tiangolo.com/tutorial/create-db-and-table/#sqlmodel-metadata
 # https://sqlmodel.tiangolo.com/tutorial/create-db-and-table/#calling-create_all
+# This MetaData object at SQLModel.metadata has a create_all() method.
+# It takes an engine and uses it to create the database and all the tables registered in this MetaData object.
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
 

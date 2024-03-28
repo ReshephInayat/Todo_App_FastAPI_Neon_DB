@@ -2,6 +2,7 @@ import { baseUrl } from "@/lib/const";
 import { Todo } from "@/types/todo";
 import Image from "next/image";
 import DeleteTodo from "./DeleteTodo";
+import UpdateTodo from "./UpdateTodo";
 
 const getTodos = async (): Promise<Todo[]> => {
   const url = baseUrl();
@@ -29,6 +30,7 @@ export default async function TodoList() {
           >
             <div className="">{item.content}</div>
             <DeleteTodo todo_id={item.id} />
+            <UpdateTodo todoId={item.id} />
           </li>
         );
       })}

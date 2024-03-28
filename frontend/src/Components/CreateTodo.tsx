@@ -88,7 +88,7 @@ const CreateTodo = () => {
             className="w-full flex-wrap text-white bg-slate-900 p-4 rounded-sm focus:border-2 border-solid border-l-blue-500 border-r-cyan-500 border-t-cyan-500 border-b-blue-500 outline-none hover:bg-sky-950 transition duration-300"
           />
 
-          <button className="w-[50%] p-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-md text-md text-white hover:bg-gradient-to-r hover:from-cyan-600 hover:to-blue-800 hover:scale-105 transition duration-300">
+          <button className="w-[50%] p-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-md text-md text-white  hover:from-cyan-600 hover:to-blue-800 hover:scale-105 transition duration-300">
             Add Task
           </button>
         </form>
