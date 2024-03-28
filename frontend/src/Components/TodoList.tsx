@@ -21,19 +21,17 @@ export default async function TodoList() {
   const data = await getTodos();
 
   return (
-    <ul className="flex flex-col justify-center items-center">
-      {data.map((item) => {
-        return (
-          <li
-            key={item.id}
-            className="text-white text-center text-xl py-2 bg-slate-800 mt-10 border border-solid border-white rounded-lg  flex items-center px-10"
-          >
-            <div className="">{item.content}</div>
-            <DeleteTodo todo_id={item.id} />
-            <UpdateTodo todoId={item.id} />
-          </li>
-        );
-      })}
+    <ul className="flex flex-col h-[100%] justify-center items-center ">
+      {data.map((item) => (
+        <li
+          key={item.id}
+          className="flex items-center justify-center w-1/3 bg-slate-800 rounded-lg border border-white text-white text-xl py-2 px-10 mt-10 "
+        >
+          <div className="flex-1">{item.content}</div>
+          <DeleteTodo todo_id={item.id} />
+          <UpdateTodo todoId={item.id} />
+        </li>
+      ))}
       {data && data.length === 0 && (
         <div className="flex justify-center items-center pt-8 pb-2">
           <Image src={"/img.svg"} alt="add task" width={250} height={250} />
